@@ -286,7 +286,9 @@ class CAWRPolicy(SACPolicy):
         # target update
         self._target_model.update(self._learn_model.state_dict())
 
-        if self._PER_type == 'Normal':
+        if self._PER_type == 'None':
+            priority_per_sample = None
+        elif self._PER_type == 'Normal':
             priority_per_sample = advantage.abs().tolist()
         elif self._PER_type == 'Standard':
             priority_per_sample = torch.exp(adv).tolist()
