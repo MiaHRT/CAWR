@@ -1,3 +1,22 @@
+/*
+% Copyright 2017 Google Inc.
+% Copyright 2025 Ranting Hu
+%
+% Licensed under the Apache License, Version 2.0 (the "License");
+% you may not use this file except in compliance with the License.
+% You may obtain a copy of the License at
+%
+%     http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing, software
+% distributed under the License is distributed on an "AS IS" BASIS,
+% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+% See the License for the specific language governing permissions and
+% limitations under the License.
+*/
+
+# Modifications to the source code have been annotated.
+
 from typing import Union, Dict, Optional
 from easydict import EasyDict
 import numpy as np
@@ -87,6 +106,7 @@ class ContinuousQVAC(nn.Module):
                 )
             )
         
+        # added to define the head of value network
         self.value_head = nn.Sequential(
             nn.Linear(encoder_output_size, critic_head_hidden_size), activation,
             RegressionHead(
@@ -110,6 +130,7 @@ class ContinuousQVAC(nn.Module):
         #        norm_type=norm_type
         #    )
         #)
+        # modified to define the head of policy network with fixed std
         self.actor_head = nn.Sequential(
             nn.Linear(encoder_output_size, actor_head_hidden_size), activation,
             ReparameterizationHead(
@@ -151,6 +172,7 @@ class ContinuousQVAC(nn.Module):
             x = self.q_head(x)['pred']
         return {'q_value': x}
     
+    # added to compute the value function
     def compute_value(self, obs: torch.Tensor) -> Dict:
         obs = self.value_encoder(obs)
         x = self.value_head(obs)

@@ -1,3 +1,22 @@
+/*
+% Copyright 2017 Google Inc.
+% Copyright 2025 Ranting Hu
+%
+% Licensed under the Apache License, Version 2.0 (the "License");
+% you may not use this file except in compliance with the License.
+% You may obtain a copy of the License at
+%
+%     http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing, software
+% distributed under the License is distributed on an "AS IS" BASIS,
+% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+% See the License for the specific language governing permissions and
+% limitations under the License.
+*/
+
+# Modifications to the source code have been annotated.
+
 from typing import Union, Optional, List, Any, Tuple
 import os
 import torch
@@ -9,6 +28,7 @@ from torch.utils.data.distributed import DistributedSampler
 
 from ding.envs import get_vec_env_setting, create_env_manager
 from ding.worker import InteractionSerialEvaluator, AdvancedReplayBuffer
+# added to import self-defined base_learner for updating priorities for two sampled batches
 from base_learner_advPER import BaseLearner
 from ding.config import read_config, compile_config
 from ding.policy import create_policy
@@ -22,7 +42,7 @@ def serial_pipeline_offline(
         env_setting: Optional[List[Any]] = None,
         model: Optional[torch.nn.Module] = None,
         max_train_iter: Optional[int] = int(1e10),
-        model_path: Optional[str] = None,
+        model_path: Optional[str] = None, # added to defined the model for initializing if pretrain
 ) -> 'Policy':  # noqa
     """
     Overview:
@@ -78,6 +98,7 @@ def serial_pipeline_offline(
     set_pkg_seed(cfg.seed, use_cuda=cfg.policy.cuda)
     policy = create_policy(cfg.policy, model=model, enable_field=['learn', 'eval'])
 
+    # added for pretrain
     if model_path is not None:
         state_dict = torch.load(model_path, map_location=lambda storage, loc: storage)
         policy._load_state_dict_learn(state_dict)
@@ -110,6 +131,7 @@ def serial_pipeline_offline(
     critic_head = 0
     batch_size = learner.policy.get_attribute('batch_size')
 
+    # modified for decoupled resampling
     while not stop:
         if collect:
             if get_world_size() > 1:

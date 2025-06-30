@@ -1,3 +1,22 @@
+/*
+% Copyright 2017 Google Inc.
+% Copyright 2025 Ranting Hu
+%
+% Licensed under the Apache License, Version 2.0 (the "License");
+% you may not use this file except in compliance with the License.
+% You may obtain a copy of the License at
+%
+%     http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing, software
+% distributed under the License is distributed on an "AS IS" BASIS,
+% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+% See the License for the specific language governing permissions and
+% limitations under the License.
+*/
+
+# Modifications to the source code have been annotated.
+
 from typing import List, Dict, Any, Tuple, Union
 import copy
 import numpy as np
@@ -20,6 +39,8 @@ expectile_regression_data = namedtuple(
     'expectile_regression_data', ['value', 'target_value', 'weight']
 )
 
+# Added for estimating the value function, this estimate is proposed in IQL (Implicit Q-Learning)
+# see https://arxiv.org/abs/2110.06169 for details
 def expectile_regression_error(
         data: namedtuple,
         tau: float,
@@ -143,6 +164,7 @@ class CAWRPolicy(SACPolicy):
         self._priority_IS_weight = False
         self._twin_critic = self._cfg.model.twin_critic
         self._num_actions = self._cfg.learn.num_actions
+        # added to define the type of policy loss and maximum for clipping weights and priorities
         self._loss_type = self._cfg.learn.loss_type
         self._max_weight = self._cfg.learn.max_weight
  
@@ -172,6 +194,7 @@ class CAWRPolicy(SACPolicy):
             self._model.actor.parameters(),
             lr=self._cfg.learn.learning_rate_policy,
         )
+        # added for optimizing the value network
         self._optimizer_value = Adam(
             self._model.value.parameters(),
             lr=self._cfg.learn.learning_rate_value,
@@ -201,6 +224,9 @@ class CAWRPolicy(SACPolicy):
         self._forward_learn_cnt = 0
 
     def _forward_learn(self, data: List[Dict[str, Any]]) -> Dict[str, Any]:
+        '''
+        This function is modified to optimize the Q network, the value network, and the policy network, with diverse policy loss function (L2, L1, Huber, Skew, Flat)
+        '''
         loss_dict = {}
         data = default_preprocess_learn(
             data,

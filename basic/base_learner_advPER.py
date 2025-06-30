@@ -1,3 +1,22 @@
+/*
+% Copyright 2017 Google Inc.
+% Copyright 2025 Ranting Hu
+%
+% Licensed under the Apache License, Version 2.0 (the "License");
+% you may not use this file except in compliance with the License.
+% You may obtain a copy of the License at
+%
+%     http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing, software
+% distributed under the License is distributed on an "AS IS" BASIS,
+% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+% See the License for the specific language governing permissions and
+% limitations under the License.
+*/
+
+# Modifications to the source code have been annotated.
+
 from ding.utils import LEARNER_REGISTRY
 from ding.worker import BaseLearner
 from typing import Optional
@@ -18,12 +37,12 @@ class BaseLearner(BaseLearner):
         # Update replay buffer's priority info
         if isinstance(log_vars, dict):
             priority = log_vars.pop('priority', None)
-            critic_adv = log_vars.pop('critic_adv', None)
+            critic_adv = log_vars.pop('critic_adv', None) # modified to collect advantage data per train iteration
         elif isinstance(log_vars, list):
             priority = log_vars[-1].pop('priority', None)
         else:
             raise TypeError("not support type for log_vars: {}".format(type(log_vars)))
-        if priority is not None:
+        if priority is not None: # modified to update priorities for two decoupled resampled batches
             replay_buffer_idx = [d.get('replay_buffer_idx', None) for d in data['actor_data']]
             replay_unique_id = [d.get('replay_unique_id', None) for d in data['actor_data']]
             replay_buffer_idx += [d.get('replay_buffer_idx', None) for d in data['critic_data']]
