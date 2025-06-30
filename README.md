@@ -8,7 +8,7 @@ This project supports D4RL benchmark Mujoco locomotion tasks: Hopper, Walker2D, 
 
 Notice that this code is modified based on the DI-engine, you can go to https://github.com/opendilab/DI-engine/tree/main for further information.
 
-The experiments in the paper are conducted using GTX1080Ti, if you use a different GPU, you may not be able to replicate our results perfectly because of the random number generation.
+The experiments in the paper are conducted using GTX1080Ti, if you use a different GPU, you may not be able to replicate our results precisely because of the random number generation.
 
 ## Configuration Instructions
 
