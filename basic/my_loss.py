@@ -8,8 +8,7 @@ from numbers import Number
 
 class Huber(Normal):
     def __init__(self, loc, scale, validate_args=None):
-        self.epoch = epoch
-        super(myDist, self).__init__(loc=loc, scale=scale, validate_args=validate_args)
+        super(Huber, self).__init__(loc=loc, scale=scale, validate_args=validate_args)
     
     def log_prob(self, value):
         if self._validate_args:
@@ -28,8 +27,7 @@ class Huber(Normal):
 
 class Skew(Normal):
     def __init__(self, loc, scale, validate_args=None):
-        self.epoch = epoch
-        super(myDist, self).__init__(loc=loc, scale=scale, validate_args=validate_args)
+        super(Skew, self).__init__(loc=loc, scale=scale, validate_args=validate_args)
     
     def log_prob(self, value):
         if self._validate_args:
@@ -43,8 +41,7 @@ class Skew(Normal):
 
 class Flat(Normal):
     def __init__(self, loc, scale, validate_args=None):
-        self.epoch = epoch
-        super(myDist, self).__init__(loc=loc, scale=scale, validate_args=validate_args)
+        super(Flat, self).__init__(loc=loc, scale=scale, validate_args=validate_args)
     
     def log_prob(self, value):
         if self._validate_args:
