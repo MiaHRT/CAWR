@@ -47,7 +47,7 @@ def serial_pipeline_offline(
 
     # Dataset
     dataset = create_dataset(cfg)
-    sampler, shuffle = None, False
+    sampler, shuffle = None, True
     if get_world_size() > 1:
         sampler, shuffle = DistributedSampler(dataset), False
     dataloader = DataLoader(

@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../../basic')
-from serial_entry_offline import serial_pipeline_offline
+from serial_entry_offline_pretrain import serial_pipeline_offline
 from ding.config import read_config
 from pathlib import Path
 
@@ -9,7 +9,7 @@ def train(args):
     config = Path(__file__).absolute().parent / args.config
     config = read_config(str(config))
     config[0].exp_name = config[0].exp_name.replace('0', str(args.seed))
-    serial_pipeline_offline(config, seed=args.seed, model_path='../hopper_medium_iql_seed10_L2/ckpt/iteration_400000.pth.tar', max_train_iter=400000)
+    serial_pipeline_offline(config, seed=args.seed, model_path='../hopper_medium_iql_seed10_241205_225910/ckpt/iteration_400000.pth.tar', max_train_iter=400000)
 
 
 if __name__ == "__main__":

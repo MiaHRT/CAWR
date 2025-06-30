@@ -3,7 +3,7 @@
 from easydict import EasyDict
 
 main_config = dict(
-    exp_name="hopper_medium_iql_seed0",
+    exp_name="hopper_medium_cawr_seed0",
     env=dict(
         env_id='hopper-medium-v2',
         collector_env_num=1,
@@ -14,7 +14,7 @@ main_config = dict(
         #),
         use_act_scale=True,
         n_evaluator_episode=1,
-        stop_value=6000,
+        stop_value=60000,
     ),
     policy=dict(
         cuda=True,
