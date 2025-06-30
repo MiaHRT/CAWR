@@ -3,9 +3,9 @@
 from easydict import EasyDict
 
 main_config = dict(
-    exp_name="hopper_medium_cawr_seed0",
+    exp_name="hopper_expert_cawr_seed0",
     env=dict(
-        env_id='hopper-medium-v2',
+        env_id='hopper-expert-v2',
         collector_env_num=1,
         evaluator_env_num=1,
         #norm_obs=dict(
@@ -18,27 +18,26 @@ main_config = dict(
     ),
     policy=dict(
         cuda=True,
-        priority = True,
-        priority_IS_weight=False,
         model=dict(
             obs_shape=11,
             action_shape=3,
         ),
         learn=dict(
             data_path=None,
+            shuffle=True,
             batch_size=512,
             learning_rate_q=3e-4,
             learning_rate_policy=3e-4,
             learning_rate_value=3e-4,
             loss_type='L2',
-            PER_type='Normal',
             tau=0.7,
             alpha=0.0,
-            beta=5.0,
-            max_weight=10000,
+            beta=3.0,
+            max_weight=100,
             anneal_step=0,
+            #init_log_std=-2,
         ),
-        collect=dict(data_type='d4rl', data_path='../../data/', n_sample=2048,),
+        collect=dict(data_type='d4rl', data_path='../../data/', ),
         eval=dict(evaluator=dict(eval_freq=1000, )),
         other=dict(replay_buffer=dict(replay_buffer_size=1000000, ), ),
     ),
@@ -58,10 +57,10 @@ create_config = dict(
         import_names=['qvac'],
     ),
     policy=dict(
-        type='cawr_pretrain',
-        import_names=['cawr_pretrain'],
+        type='cawr',
+        import_names=['cawr'],
     ),
-    replay_buffer=dict(type='advanced', ),
+    replay_buffer=dict(type='naive', ),
 )
 create_config = EasyDict(create_config)
 create_config = create_config

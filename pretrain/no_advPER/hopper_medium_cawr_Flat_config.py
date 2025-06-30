@@ -24,11 +24,12 @@ main_config = dict(
         ),
         learn=dict(
             data_path=None,
+            shuffle=True,
             batch_size=512,
             learning_rate_q=3e-4,
             learning_rate_policy=3e-4,
             learning_rate_value=3e-4,
-            loss_type='L2',
+            loss_type='Flat',
             PER_type='None',
             tau=0.7,
             alpha=0.0,

@@ -18,27 +18,26 @@ main_config = dict(
     ),
     policy=dict(
         cuda=True,
-        priority = True,
-        priority_IS_weight=False,
         model=dict(
             obs_shape=11,
             action_shape=3,
         ),
         learn=dict(
             data_path=None,
+            shuffle=True,
             batch_size=512,
             learning_rate_q=3e-4,
             learning_rate_policy=3e-4,
             learning_rate_value=3e-4,
-            loss_type='L2',
-            PER_type='Normal',
+            loss_type='Huber',
+            PER_type='None',
             tau=0.7,
             alpha=0.0,
             beta=5.0,
             max_weight=10000,
             anneal_step=0,
         ),
-        collect=dict(data_type='d4rl', data_path='../../data/', n_sample=2048, ),
+        collect=dict(data_type='d4rl', data_path='../../data/', ),
         eval=dict(evaluator=dict(eval_freq=1000, )),
         other=dict(replay_buffer=dict(replay_buffer_size=1000000, ), ),
     ),
@@ -58,15 +57,10 @@ create_config = dict(
         import_names=['qvac'],
     ),
     policy=dict(
-        type='cawr_advPER',
-        import_names=['cawr_advPER'],
+        type='cawr_pretrain',
+        import_names=['cawr_pretrain'],
     ),
-    replay_buffer=dict(type='advanced', 
-                       ),
-    learner=dict(
-        type='base_learner_advPER',
-        import_names=['base_learner_advPER'],
-    ),
+    replay_buffer=dict(type='naive', ),
 )
 create_config = EasyDict(create_config)
 create_config = create_config
