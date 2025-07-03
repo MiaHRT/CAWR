@@ -31,6 +31,9 @@ class Huber(Normal):
         var = (self.scale ** 2)
         log_scale = math.log(self.scale) if isinstance(self.scale, Real) else self.scale.log()
         
+        # Huber Loss is a loss function first proposed by Huber in 1964, 
+        # behaves as the L2 norm when close to the origin and transitions to the L1 norm when far from the origin, 
+        # see https://link.springer.com/chapter/10.1007/978-1-4612-4380-9_35 for more details.
         kappa = 0.2
         errors = value - self.loc
         huber_loss = torch.where(

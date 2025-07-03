@@ -21,7 +21,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from torch.distributions import Normal, Independent, Laplace
-from my_loss import Huber, Skew, Flat
+from policy_loss import Huber, Skew, Flat
 from collections import namedtuple
 import torch.nn as nn
 

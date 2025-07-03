@@ -23,7 +23,7 @@ import torch.nn.functional as F
 from torch.distributions import Normal, Independent, Laplace
 from collections import namedtuple
 import torch.nn as nn
-from my_loss import Huber, Skew, Flat
+from policy_loss import Huber, Skew, Flat
 
 from ding.torch_utils import Adam, to_device
 from ding.rl_utils import v_1step_td_data, v_1step_td_error, get_train_sample
